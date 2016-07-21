@@ -27,20 +27,10 @@ class ConventionType(NameStrMixin, Model):
     description = db.Column(db.UnicodeText())
 
 
-class ConventionThemeType(NameStrMixin, Model):
-    __tablename__ = 'convention_theme_type'
-
-    id = db.Column(db.BigInteger(), primary_key=True)
-    name = db.Column(db.Unicode(64), unique=True, nullable=False)
-    description = db.Column(db.UnicodeText())
-
-
 class ConventionTheme(NameStrMixin, Model):
     __tablename__ = 'convention_theme'
 
     id = db.Column(db.BigInteger(), primary_key=True)
-    themetype_id = db.Column(db.BigInteger(), db.ForeignKey('convention_theme_type.id', onupdate='CASCADE', ondelete='CASCADE'), nullable=False)
-    themetype = db.relationship('ConventionThemeType', backref='themes')
     name = db.Column(db.Unicode(64), unique=True, nullable=False)
     description = db.Column(db.UnicodeText())
 

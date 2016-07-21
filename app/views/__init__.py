@@ -19,7 +19,6 @@ class CustomModelView(ModelView):
 
 
 admin.add_view(CustomModelView(models.ConventionType, db.session))
-admin.add_view(CustomModelView(models.ConventionThemeType, db.session))
 admin.add_view(CustomModelView(models.ConventionTheme, db.session))
 admin.add_view(CustomModelView(models.ConventionLocation, db.session))
 admin.add_view(CustomModelView(models.Convention, db.session))
