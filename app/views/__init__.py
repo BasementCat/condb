@@ -15,11 +15,16 @@ class CustomModelView(ModelView):
     @property
     def column_exclude_list(self):
         return ('created_at', 'updated_at')
-    
+
+
+class ConventionLocationModelView(CustomModelView):
+    def on_model_change(self, form, model, is_created):
+        if not (model.latitude and model.longitude):
+            model.get_lat_lon()
 
 
 admin.add_view(CustomModelView(models.ConventionType, db.session))
 admin.add_view(CustomModelView(models.ConventionTheme, db.session))
-admin.add_view(CustomModelView(models.ConventionLocation, db.session))
+admin.add_view(ConventionLocationModelView(models.ConventionLocation, db.session))
 admin.add_view(CustomModelView(models.Convention, db.session))
 admin.add_view(CustomModelView(models.ConventionYear, db.session))

@@ -1,4 +1,5 @@
 import arrow
+import requests
 
 import sqlalchemy_utils as sau
 
@@ -42,12 +43,22 @@ class ConventionLocation(Model):
     country_code = db.Column(db.Unicode(6), index=True, nullable=False)
     state_province = db.Column(db.Unicode(128), index=True)
     city = db.Column(db.Unicode(128), index=True)
+    latitude = db.Column(db.Float())
+    longitude = db.Column(db.Float())
 
     def __unicode__(self):
-        return u': '.join(filter(None, [self.country_code, self.state_province, self.city]))
+        return u', '.join(filter(None, [self.country_code, self.state_province, self.city]))
 
     def __str__(self):
         return unicode(self).encode('utf-8')
+
+    def get_lat_lon(self):
+        url = 'http://nominatim.openstreetmap.org/search/{}?format=json&limit=1'.format(str(self))
+        res = requests.get(url)
+        res.raise_for_status()
+        data = res.json()
+        self.latitude = data[0]['lat']
+        self.longitude = data[0]['lon']
 
 
 class Convention(NameStrMixin, Model):
