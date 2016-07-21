@@ -75,3 +75,15 @@ class ConventionYear(Model):
     starts = db.Column(db.Date())
     ends = db.Column(db.Date())
     attendance = db.Column(db.Integer())
+
+    def __unicode__(self):
+        return u'[{}] {} {}: {} ({})'.format(
+            self.convention.contype.name,
+            self.convention.name,
+            arrow.get(self.starts).format('YYYY'),
+            self.theme.name,
+            self.attendance
+        )
+
+    def __str__(self):
+        return unicode(self).encode('utf-8')
