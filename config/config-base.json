@@ -1,0 +1,9 @@
+{
+    "DEBUG": false,
+    "SECRET_KEY": "Put a real secret key here",
+
+    "SQLALCHEMY_DATABASE_URI": "connector+dialect://user:pass@host/database",
+    "SQLALCHEMY_BINDS": {},
+
+    "__BOOTSTRAP_SERVE_LOCAL": false
+}
