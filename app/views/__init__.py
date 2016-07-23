@@ -21,6 +21,7 @@ class ConventionLocationModelView(CustomModelView):
     def on_model_change(self, form, model, is_created):
         if not (model.latitude and model.longitude):
             model.get_lat_lon()
+            model.get_distances()
 
 
 admin.add_view(CustomModelView(models.ConventionType, db.session))
