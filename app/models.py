@@ -63,16 +63,26 @@ class ConventionLocation(Model):
         self.longitude = data[0]['lon']
 
     def straight_line_distance_to(self, other_loc):
-        # http://andrew.hedges.name/experiments/haversine/
-        dlon = other_loc.longitude - self.longitude
-        dlat = other_loc.latitude - self.latitude
-        a = (math.sin(dlat / 2)) ^ 2 + math.cos(other_loc.latitude) * math.cos(self.latitude) * (math.sin(dlon / 2)) ^ 2
-        c = 2 * math.atan2(math.sqrt(a), math.sqrt(1 - a))
-        return 3961 * c
+        # https://gist.github.com/rochacbruno/2883505
+        lat1 = float(self.latitude)
+        lon1 = float(self.longitude)
+        lat2 = float(other_loc.latitude)
+        lon2 = float(other_loc.longitude)
+        # radius = 6371 # km
+        radius = 3961 # mi
+
+        dlat = math.radians(lat2-lat1)
+        dlon = math.radians(lon2-lon1)
+        a = math.sin(dlat/2) * math.sin(dlat/2) + math.cos(math.radians(lat1)) \
+            * math.cos(math.radians(lat2)) * math.sin(dlon/2) * math.sin(dlon/2)
+        c = 2 * math.atan2(math.sqrt(a), math.sqrt(1-a))
+        d = radius * c
+
+        return d
 
     def get_distances(self):
         for loc in ConventionLocation.query:
-            if not self.id or not ConventionLocationDistance.query.filter(location_a == self, location_b == loc).first():
+            if loc is not self and (not self.id or not ConventionLocationDistance.query.filter(ConventionLocationDistance.location_a == self, ConventionLocationDistance.location_b == loc).first()):
                 db.session.add(ConventionLocationDistance(
                     location_a=self,
                     location_b=loc,
@@ -85,11 +95,17 @@ class ConventionLocationDistance(Model):
 
     id = db.Column(db.BigInteger(), primary_key=True)
     location_a_id = db.Column(db.BigInteger(), db.ForeignKey('convention_location.id', onupdate='CASCADE', ondelete='CASCADE'), nullable=False)
-    location_a = db.relationship('ConventionLocation', backref='distances')
+    location_a = db.relationship('ConventionLocation', foreign_keys=[location_a_id], backref='distances')
     location_b_id = db.Column(db.BigInteger(), db.ForeignKey('convention_location.id', onupdate='CASCADE', ondelete='CASCADE'), nullable=False)
-    location_b = db.relationship('ConventionLocation')
+    location_b = db.relationship('ConventionLocation', foreign_keys=[location_b_id])
     straight_line_distance = db.Column(db.Float())
     driving_distance = db.Column(db.Float())
+
+    def __unicode__(self):
+        return u'{} -> {} ({} mi)'.format(str(self.location_a), str(self.location_b), self.straight_line_distance)
+
+    def __str__(self):
+        return unicode(self).encode('utf-8')
 
 
 class Convention(NameStrMixin, Model):
