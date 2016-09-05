@@ -5,5 +5,13 @@
     "SQLALCHEMY_DATABASE_URI": "connector+dialect://user:pass@host/database",
     "SQLALCHEMY_BINDS": {},
 
+    "MAIL_USERNAME": null,
+    "MAIL_PASSWORD": null,
+    "MAIL_DEFAULT_SENDER": "noreply@condb",
+    "MAIL_SERVER": "localhost",
+    "MAIL_PORT": 2525,
+    "MAIL_USE_SSL": false,
+    "MAIL_USE_TLS": false,
+
     "__BOOTSTRAP_SERVE_LOCAL": false
 }

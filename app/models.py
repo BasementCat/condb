@@ -5,6 +5,8 @@ import requests
 
 import sqlalchemy_utils as sau
 
+from flask_user import UserMixin
+
 from app import db
 
 
@@ -24,6 +26,26 @@ class NameStrMixin(object):
 
     def __str__(self):
         return unicode(self).encode('utf-8')
+
+
+class User(UserMixin, Model):
+    __tablename__ = 'user'
+
+    id = db.Column(db.BigInteger(), primary_key=True)
+
+    # User authentication information
+    username = db.Column(db.Unicode(128), nullable=False, unique=True)
+    password = db.Column(db.Unicode(256), nullable=False, server_default=u'')
+    reset_password_token = db.Column(db.Unicode(128), nullable=False, server_default=u'')
+
+    # User email information
+    email = db.Column(db.Unicode(256), nullable=False, unique=True)
+    confirmed_at = db.Column(db.DateTime())
+
+    # User information
+    active = db.Column('is_active', db.Boolean(), nullable=False, server_default=u'0')
+    first_name = db.Column(db.Unicode(128), nullable=False, server_default=u'')
+    last_name = db.Column(db.Unicode(128), nullable=False, server_default=u'')
 
 
 class ConventionType(NameStrMixin, Model):

@@ -10,6 +10,8 @@ Flask-SQLAlchemy==2.0
 # Flask-WTF==0.9.5
 Flask-Migrate
 Flask-Admin
+Flask-User
+Flask-Mail
 
 # MySQL and SA
 PyMySQL
