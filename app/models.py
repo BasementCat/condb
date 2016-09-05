@@ -49,11 +49,12 @@ class ConventionLocation(Model):
     country_code = db.Column(db.Unicode(6), index=True, nullable=False)
     state_province = db.Column(db.Unicode(128), index=True)
     city = db.Column(db.Unicode(128), index=True)
+    address = db.Column(db.Unicode(256), index=True)
     latitude = db.Column(db.Float())
     longitude = db.Column(db.Float())
 
     def __unicode__(self):
-        return u', '.join(filter(None, [self.country_code, self.state_province, self.city]))
+        return u', '.join(filter(None, [self.country_code, self.state_province, self.city, self.address]))
 
     def __str__(self):
         return unicode(self).encode('utf-8')
