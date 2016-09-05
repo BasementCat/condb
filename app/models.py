@@ -47,6 +47,26 @@ class User(UserMixin, Model):
     first_name = db.Column(db.Unicode(128), nullable=False, server_default=u'')
     last_name = db.Column(db.Unicode(128), nullable=False, server_default=u'')
 
+    # Roles
+    roles = db.relationship('Role', secondary='user_roles', backref=db.backref('users', lazy='dynamic'))
+
+    def __unicode__(self):
+        return self.username
+
+    def __str__(self):
+        return unicode(self).encode('utf-8')
+
+
+class Role(NameStrMixin, Model):
+    id = db.Column(db.BigInteger(), primary_key=True)
+    name = db.Column(db.Unicode(128), unique=True)
+
+
+class UserRoles(Model):
+    id = db.Column(db.BigInteger(), primary_key=True)
+    user_id = db.Column(db.BigInteger(), db.ForeignKey('user.id', onupdate='CASCADE', ondelete='CASCADE'), nullable=False)
+    role_id = db.Column(db.BigInteger(), db.ForeignKey('role.id', onupdate='CASCADE', ondelete='CASCADE'), nullable=False)
+
 
 class ConventionType(NameStrMixin, Model):
     __tablename__ = 'convention_type'
