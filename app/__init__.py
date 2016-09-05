@@ -1,3 +1,4 @@
+import logging
 import os
 import json
 import hashlib
@@ -16,6 +17,8 @@ apps = {}
 
 db = SQLAlchemy()
 admin = Admin(name='condb', template_mode='bootstrap3')
+logging.basicConfig(level=logging.DEBUG)
+logger = logging.getLogger(__name__)
 
 
 class Config(object):

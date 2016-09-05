@@ -13,6 +13,10 @@ class Model(db.Model):
     created_at = db.Column(sau.ArrowType(), index=True, default=arrow.utcnow)
     updated_at = db.Column(sau.ArrowType(), index=True, default=arrow.utcnow, onupdate=arrow.utcnow)
 
+    @classmethod
+    def _truncate_table(self):
+        db.engine.execute("TRUNCATE TABLE `{}`;".format(self.__table__.name))
+
 
 class NameStrMixin(object):
     def __unicode__(self):
@@ -82,7 +86,11 @@ class ConventionLocation(Model):
 
     def get_distances(self):
         for loc in ConventionLocation.query:
-            if loc is not self and (not self.id or not ConventionLocationDistance.query.filter(ConventionLocationDistance.location_a == self, ConventionLocationDistance.location_b == loc).first()):
+            existing_dist = ConventionLocationDistance.query.filter(
+                ((ConventionLocationDistance.location_a == self) & (ConventionLocationDistance.location_b == loc))
+                | ((ConventionLocationDistance.location_a == loc) & (ConventionLocationDistance.location_b == self))
+            ).first()
+            if loc is not self and (not self.id or not existing_dist):
                 db.session.add(ConventionLocationDistance(
                     location_a=self,
                     location_b=loc,
