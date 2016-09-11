@@ -13,5 +13,9 @@
     "MAIL_USE_SSL": false,
     "MAIL_USE_TLS": false,
 
-    "__BOOTSTRAP_SERVE_LOCAL": false
+    "SITE_NAME": "ConDB",
+    "APP_NAME": "ConDB",
+    "USER_APP_NAME": "ConDB",
+
+    "BOOTSTRAP_SERVE_LOCAL": false
 }

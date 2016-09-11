@@ -13,6 +13,7 @@ from flask.ext.sqlalchemy import SQLAlchemy
 from flask_admin import Admin
 from flask_user import UserManager, SQLAlchemyAdapter
 from flask_mail import Mail
+from flask_bootstrap import Bootstrap
 
 
 apps = {}
@@ -20,6 +21,7 @@ apps = {}
 db = SQLAlchemy()
 admin = Admin(name='condb', template_mode='bootstrap3')
 mail = Mail()
+bootstrap = Bootstrap()
 
 logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
@@ -77,12 +79,16 @@ def create_app(config):
     db.init_app(app)
     admin.init_app(app)
     mail.init_app(app)
+    bootstrap.init_app(app)
 
     from app.models import User
     db_adapter = SQLAlchemyAdapter(db, User)
     user_manager = UserManager(db_adapter, app)
 
     import views
+    from views import index as index_app
+
+    app.register_blueprint(index_app.app, url_prefix=None)
 
     return app
 

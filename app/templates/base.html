@@ -1,0 +1,28 @@
+{# for flask-user compatibility #}
+{% extends "base.jinja.html" %}
+{% from "bootstrap/utils.html" import flashed_messages %}
+
+{% block head %}
+    {{ super() }}
+    <!-- In-lining styles to avoid needing a separate .css file -->
+    <style>
+        hr { border-color: #cccccc; margin: 0; }
+        .no-margins { margin: 0px; }
+        .with-margins { margin: 10px; }
+        .col-centered { float: none; margin: 0 auto; }
+
+        form {
+            width: 50%;
+            margin: 0 auto;
+        }
+    </style>
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7/html5shiv.js"></script>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/respond.js/1.4.2/respond.js"></script>
+    <![endif]-->
+{% endblock %}
+
+{% block main %}{% block content %}{% endblock %}{% endblock %}
