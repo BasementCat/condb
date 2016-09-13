@@ -28,6 +28,10 @@ class NameStrMixin(object):
         return unicode(self).encode('utf-8')
 
 
+class HideableMixin(object):
+    is_hidden = db.Column(db.Boolean(), nullable=False, default=False, server_default='0')
+
+
 class User(UserMixin, Model):
     __tablename__ = 'user'
 
@@ -68,7 +72,7 @@ class UserRoles(Model):
     role_id = db.Column(db.BigInteger(), db.ForeignKey('role.id', onupdate='CASCADE', ondelete='CASCADE'), nullable=False)
 
 
-class ConventionType(NameStrMixin, Model):
+class ConventionType(HideableMixin, NameStrMixin, Model):
     __tablename__ = 'convention_type'
 
     id = db.Column(db.BigInteger(), primary_key=True)
@@ -76,7 +80,7 @@ class ConventionType(NameStrMixin, Model):
     description = db.Column(db.UnicodeText())
 
 
-class ConventionTheme(NameStrMixin, Model):
+class ConventionTheme(HideableMixin, NameStrMixin, Model):
     __tablename__ = 'convention_theme'
 
     id = db.Column(db.BigInteger(), primary_key=True)
@@ -84,7 +88,7 @@ class ConventionTheme(NameStrMixin, Model):
     description = db.Column(db.UnicodeText())
 
 
-class ConventionLocation(Model):
+class ConventionLocation(HideableMixin, Model):
     __tablename__ = 'convention_location'
 
     id = db.Column(db.BigInteger(), primary_key=True)
@@ -159,7 +163,7 @@ class ConventionLocationDistance(Model):
         return unicode(self).encode('utf-8')
 
 
-class Convention(NameStrMixin, Model):
+class Convention(HideableMixin, NameStrMixin, Model):
     __tablename__ = 'convention'
 
     id = db.Column(db.BigInteger(), primary_key=True)
@@ -171,7 +175,7 @@ class Convention(NameStrMixin, Model):
     description = db.Column(db.UnicodeText())
 
 
-class ConventionYear(Model):
+class ConventionYear(HideableMixin, Model):
     __tablename__ = 'convention_year'
 
     id = db.Column(db.BigInteger(), primary_key=True)
