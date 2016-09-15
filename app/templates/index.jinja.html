@@ -5,8 +5,13 @@
 <div class="container-fluid home-index">
     <div class="row-fluid">
         <div class="col-sm-6">
-            sdfljksd
+            <div class="map"></div>
         </div>
     </div>
 </div> <!-- /container -->
+{% endblock %}
+
+{% block scripts %}
+    {{ super() }}
+    <script src="https://maps.googleapis.com/maps/api/js?key={{ config.get('GOOGLE_MAPS_API_KEY') }}&callback=init_index_map" async defer></script>
 {% endblock %}

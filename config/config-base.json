@@ -17,5 +17,7 @@
     "APP_NAME": "ConDB",
     "USER_APP_NAME": "ConDB",
 
-    "BOOTSTRAP_SERVE_LOCAL": false
+    "BOOTSTRAP_SERVE_LOCAL": false,
+
+    "GOOGLE_MAPS_API_KEY": "put a valid api key here"
 }
