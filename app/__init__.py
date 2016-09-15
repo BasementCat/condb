@@ -86,9 +86,13 @@ def create_app(config):
     user_manager = UserManager(db_adapter, app)
 
     import views
-    from views import index as index_app
+    from views import (
+        index as index_app,
+        api as api_app,
+        )
 
     app.register_blueprint(index_app.app, url_prefix=None)
+    app.register_blueprint(api_app.app, url_prefix='/api')
 
     return app
 
