@@ -92,7 +92,17 @@ class ConventionModelView(HiddenModelViewMixin, EditorModelView):
 
 
 class ConventionYearModelView(HiddenModelViewMixin, EditorModelView):
-    pass
+    @property
+    def column_filters(self):
+        return super(HiddenModelViewMixin, self).column_filters + [
+            'convention',
+            'theme',
+            'location',
+            'is_hidden',
+            'starts',
+            'ends',
+            'attendance',
+        ]
 
 
 admin.add_view(UserModelView(models.User, db.session))
