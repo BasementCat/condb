@@ -31,7 +31,11 @@ function init_index_map() {
         $.get(
             '/api/conventions',
             function(data) {
-                $('.home-index .convention-list-container').html(data);
+                $('.home-index .convention-list-container')
+                    .find('.convention')
+                        .remove()
+                    .end()
+                    .append(data);
             },
             'html'
         );

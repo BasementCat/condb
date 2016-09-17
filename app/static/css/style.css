@@ -12,3 +12,7 @@ nav.navbar {
 .home-index .convention {
     overflow: auto;
 }
+
+.home-index .convention-list-container .row-fluid {
+    overflow: auto;
+}
