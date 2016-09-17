@@ -19,6 +19,21 @@ class Model(db.Model):
     def _truncate_table(self):
         db.engine.execute("TRUNCATE TABLE `{}`;".format(self.__table__.name))
 
+    @classmethod
+    def iter_all_models(self):
+        queue = [self]
+        while queue:
+            model = queue.pop()
+            yield model
+            queue += model.__subclasses__()
+
+    @classmethod
+    def models_having_mixin(self, mixin):
+        return filter(
+            lambda model: issubclass(model, mixin),
+            self.iter_all_models()
+        )
+
 
 class NameStrMixin(object):
     def __unicode__(self):

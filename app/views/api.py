@@ -3,7 +3,14 @@ from flask import (
     jsonify,
     )
 
+from flask_user import current_user
+
 from app.models import (
+    # Used for filtering
+    Model,
+    HideableMixin,
+
+    # Actual models
     ConventionLocation,
     ConventionLocationDistance,
     Convention,
@@ -19,6 +26,14 @@ def conventions():
     query = ConventionYear.query
 
     # TODO: filter the query
+    # Restrict viewing hidden objects to editors
+    if not current_user.is_authenticated or not current_user.has_roles(['editor', 'admin']):
+        for model in Model.models_having_mixin(HideableMixin):
+            if model is ConventionYear:
+                continue
+            query = query \
+                .join(model) \
+                .filter(model.is_hidden == 0)
 
     conventions = [
         {
