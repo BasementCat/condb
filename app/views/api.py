@@ -1,6 +1,8 @@
 from flask import (
     Blueprint,
     jsonify,
+    request,
+    render_template,
     )
 
 from flask_user import current_user
@@ -35,33 +37,38 @@ def conventions():
                 .join(model) \
                 .filter(model.is_hidden == 0)
 
-    conventions = [
-        {
-            'convention': {
-                'contype': {
-                    'name': convention_location.convention.contype.name,
-                    'description': convention_location.convention.contype.description,
+    if 'application/json' in request.headers.get('Accept', ''):
+        conventions = [
+            {
+                'convention': {
+                    'contype': {
+                        'name': convention_year.convention.contype.name,
+                        'description': convention_year.convention.contype.description,
+                    },
+                    'name': convention_year.convention.name,
+                    'description': convention_year.convention.description,
                 },
-                'name': convention_location.convention.name,
-                'description': convention_location.convention.description,
-            },
-            'theme': {
-                'name': convention_location.theme.name,
-                'description': convention_location.theme.description,
-            },
-            'location': {
-                'country_code': convention_location.location.country_code,
-                'state_province': convention_location.location.state_province,
-                'city': convention_location.location.city,
-                'address': convention_location.location.address,
-                'latitude': convention_location.location.latitude,
-                'longitude': convention_location.location.longitude,
-            },
-            'starts': str(convention_location.starts),
-            'ends': str(convention_location.ends),
-            'attendance': convention_location.attendance,
-        }
-        for convention_location in query
-    ]
+                'theme': {
+                    'name': convention_year.theme.name,
+                    'description': convention_year.theme.description,
+                },
+                'location': {
+                    'country_code': convention_year.location.country_code,
+                    'state_province': convention_year.location.state_province,
+                    'city': convention_year.location.city,
+                    'address': convention_year.location.address,
+                    'latitude': convention_year.location.latitude,
+                    'longitude': convention_year.location.longitude,
+                },
+                'starts': str(convention_year.starts),
+                'ends': str(convention_year.ends),
+                'attendance': convention_year.attendance,
+            }
+            for convention_year in query
+        ]
 
-    return jsonify({'conventions': conventions})
+        return jsonify({'conventions': conventions})
+    elif 'text/html' in request.headers.get('Accept', ''):
+        return render_template('api/conventions.jinja.html', conventions=query.all())
+    else:
+        abort(400, "Don't know how to send you the right content-type")

@@ -9,18 +9,32 @@ function init_index_map() {
     map_div.css({height: map_div.innerWidth() * (2/3)});
 
     function make_markers() {
-        $.get('/api/conventions', function(data) {
-            for (var i = 0; i < data.conventions.length; i++) {
-                var marker = new google.maps.Marker({
-                    position: {
-                        lat: data.conventions[i].location.latitude,
-                        lng: data.conventions[i].location.longitude,
-                    },
-                    map: index_map,
-                    title: data.conventions[i].convention.name,
-                });
-            }
-        });
+        $.get(
+            '/api/conventions',
+            function(data) {
+                for (var i = 0; i < data.conventions.length; i++) {
+                    var marker = new google.maps.Marker({
+                        position: {
+                            lat: data.conventions[i].location.latitude,
+                            lng: data.conventions[i].location.longitude,
+                        },
+                        map: index_map,
+                        title: data.conventions[i].convention.name,
+                    });
+                }
+            },
+            'json'
+        );
+    };
+
+    function make_list() {
+        $.get(
+            '/api/conventions',
+            function(data) {
+                $('.home-index .convention-list-container').html(data);
+            },
+            'html'
+        );
     };
 
     function init(lat, lng) {
@@ -30,6 +44,7 @@ function init_index_map() {
         });
 
         make_markers();
+        make_list();
     };
 
     function init_default() {
