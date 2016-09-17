@@ -1,0 +1,14 @@
+{% for convention_year in conventions %}
+    <div class="row-fluid convention">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <div class="col-sm-6"><i class="fa fa-commenting"></i> {{ convention_year.convention.name }}</div>
+                <div class="col-sm-6"><i class="fa fa-tag"></i> {{ convention_year.convention.contype.name }}</div>
+                <div class="col-sm-6"><i class="fa fa-calendar"></i> {{ convention_year.starts }}</div>
+                <div class="col-sm-6"><i class="fa fa-paint-brush"></i> {{ convention_year.theme.name }}</div>
+                <div class="col-sm-6"><i class="fa fa-map-marker"></i> {{ convention_year.location }} </div>
+                <div class="col-sm-6"><i class="fa fa-users"></i> {{ convention_year.attendance }} </div>
+            </div>
+        </div>
+    </div>
+{% endfor %}
