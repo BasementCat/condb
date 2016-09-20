@@ -125,10 +125,14 @@ class ConventionLocation(HideableMixin, Model):
         res = requests.get(url)
         res.raise_for_status()
         data = res.json()
-        self.latitude = data[0]['lat']
-        self.longitude = data[0]['lon']
+        if data:
+            self.latitude = data[0]['lat']
+            self.longitude = data[0]['lon']
 
     def straight_line_distance_to(self, other_loc):
+        if self.latitude is None or self.longitude is None:
+            return
+
         # https://gist.github.com/rochacbruno/2883505
         lat1 = float(self.latitude)
         lon1 = float(self.longitude)
@@ -148,6 +152,9 @@ class ConventionLocation(HideableMixin, Model):
 
     def get_distances(self):
         for loc in ConventionLocation.query:
+            if self.latitude is None or self.longitude is None or loc.latitude is None or loc.longitude is None:
+                continue
+
             existing_dist = ConventionLocationDistance.query.filter(
                 ((ConventionLocationDistance.location_a == self) & (ConventionLocationDistance.location_b == loc))
                 | ((ConventionLocationDistance.location_a == loc) & (ConventionLocationDistance.location_b == self))
