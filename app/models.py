@@ -3,6 +3,7 @@ import math
 import arrow
 import requests
 
+from sqlalchemy.orm import backref
 import sqlalchemy_utils as sau
 
 from flask_user import UserMixin
@@ -172,9 +173,9 @@ class ConventionLocationDistance(Model):
 
     id = db.Column(db.BigInteger(), primary_key=True)
     location_a_id = db.Column(db.BigInteger(), db.ForeignKey('convention_location.id', onupdate='CASCADE', ondelete='CASCADE'), nullable=False)
-    location_a = db.relationship('ConventionLocation', foreign_keys=[location_a_id], backref='distances')
+    location_a = db.relationship('ConventionLocation', foreign_keys=[location_a_id], backref=backref('distances', cascade='all, delete-orphan'))
     location_b_id = db.Column(db.BigInteger(), db.ForeignKey('convention_location.id', onupdate='CASCADE', ondelete='CASCADE'), nullable=False)
-    location_b = db.relationship('ConventionLocation', foreign_keys=[location_b_id])
+    location_b = db.relationship('ConventionLocation', foreign_keys=[location_b_id], backref=backref('distances_b', cascade='all, delete-orphan'))
     straight_line_distance = db.Column(db.Float())
     driving_distance = db.Column(db.Float())
 
